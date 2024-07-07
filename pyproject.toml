@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "api-scaffold"
+version = "0.1.0"
+description = "a scaffold for building Async Python APIs using FastAPI, Alembic, SQLModel, and other tools"
+authors = ["Abizer Lokhandwala <abizer@abizer.me>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.0"
+uvicorn = "^0.30.1"
+sqlmodel = "^0.0.19"
+pydantic = "^2.8.2"
+fastapi-async-sqlalchemy = "^0.6.1"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
+asyncpg = "^0.29.0"
+pydantic-settings = "^2.3.4"
+uuid6 = "^2024.1.12"
+fastapi-pagination = "^0.12.26"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.1"
+pytest = "^8.2.2"
+alembic = "^1.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
