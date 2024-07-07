@@ -16,6 +16,18 @@ class IOrderEnum(str, Enum):
     descendent = "descendent"
 
 
+# basic schemas
+class UserIdentity(BaseModel):
+    id: str
+    email: str
+
+class ApiKeyIdentity(BaseModel):
+    api_key: str 
+
+class SupabaseAccessToken(BaseModel):
+    sub: str 
+    email: str
+
 # API response schemas
 class InfoResponse(BaseModel):
     project_name: str

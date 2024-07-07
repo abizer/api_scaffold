@@ -20,6 +20,7 @@ pydantic-settings = "^2.3.4"
 uuid6 = "^2024.1.12"
 fastapi-pagination = "^0.12.26"
 aiosqlite = "^0.20.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 
 [tool.poetry.group.dev.dependencies]

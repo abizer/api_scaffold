@@ -67,6 +67,9 @@ class Settings(BaseSettings):
 
     DATABASE_ENGINE: str = "sqlite"
 
+    AUTHENTICATION_ENABLED: bool = True 
+    AUTH_JWT_SECRET: str
+
     _env_file = os.path.abspath(".env")
     model_config = SettingsConfigDict(case_sensitive=True, env_file=_env_file)
 
