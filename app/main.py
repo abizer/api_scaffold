@@ -26,7 +26,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
 
-# we use alembic to manage migrations
+# we use alembic to manage migrations but for sqlite just create the tables
+# immediately for effect
 engine = get_engine_for_db_type(settings.DATABASE_ENGINE)
 app.add_middleware(SQLModelMiddleware, custom_engine=engine)
 app.add_middleware(

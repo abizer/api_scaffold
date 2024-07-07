@@ -1,10 +1,10 @@
 import asyncio
-import importlib
 from logging.config import fileConfig
 
 from alembic import context
 from app.core.config import settings
 from app.core.db.session import get_uri_for_db_type
+from app.utils.imports import import_from_crud
 from app.modules import crud
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel
@@ -18,21 +18,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-
-def _import_from_crud(crud):
-    models = []
-    for name in crud.__all__:
-        crud_object = getattr(crud, name)
-        model_class = crud_object.model
-        module_name = model_class.__module__
-        class_name = model_class.__name__
-        module = importlib.import_module(module_name)
-        model = getattr(module, class_name)
-        models.append(model)
-    return models
-
-
-imported_modules = _import_from_crud(crud)
+imported_modules = import_from_crud(crud)
 target_metadata = SQLModel.metadata
 
 db_url = get_uri_for_db_type(settings.DATABASE_ENGINE)

@@ -1,8 +1,10 @@
+import asyncio
 from sqlalchemy import Engine
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import AsyncAdaptedQueuePool, NullPool
 from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlmodel import SQLModel
 
 from app.core.config import ModeEnum, settings
 
