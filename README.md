@@ -89,4 +89,6 @@ analogously for fly.io, except fly uses the contents of the .env file we're like
 just fly-sync-secrets
 ```
 
-basic bearer token auth is being implemented
+the current auth implementation is extremely dumb/simple: it expects a JWT in the bearer token of the Authorization
+header, but only checks the signature validity of the JWT before granting API key access to protected fields. 
+this is just a demo/scaffold, you'll have to decide how to implement users/api auth yourself using this as a basis.
