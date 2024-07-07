@@ -1,11 +1,12 @@
 name: Deploy app-prod
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'app/**'
+  # for now we push prod manually
+  # push:
+  #   branches:
+  #     - master
+  #   paths:
+  #     - 'app/**'
     #   - 'supabase/migrations/**'
     #   - 'supabase/seed.sql'
 

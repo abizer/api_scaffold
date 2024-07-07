@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .core.config import settings
 from .core.db.middleware import SQLModelMiddleware
-from .core.db.session import engine
+from .core.db.session import get_engine_for_db_type
 from .core.log import D, make_logger
 
 from .modules.api import v1_router
@@ -25,6 +25,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
+
+# we use alembic to manage migrations
+engine = get_engine_for_db_type(settings.DATABASE_ENGINE)
 app.add_middleware(SQLModelMiddleware, custom_engine=engine)
 app.add_middleware(
     CORSMiddleware,
@@ -44,4 +47,4 @@ def status() -> JSONResponse:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app)
+    uvicorn.run(app, host="127.0.0.1", port=8080)

@@ -16,7 +16,7 @@ class ModeEnum(str, Enum):
 
 class Settings(BaseSettings):
     MODE: ModeEnum = ModeEnum.DEV
-    PROJECT_NAME: str = "scaffold"
+    PROJECT_NAME: str = "exampleproject-api"
 
     # in practice GIT_SHA will be populated by github action via docker build arg
     GIT_SHA: str = "dev"
@@ -40,9 +40,9 @@ class Settings(BaseSettings):
     DATABASE_HOST: str
     DATABASE_PORT: int
     DATABASE_NAME: str
-    ASYNC_DATABASE_URI: PostgresDsn | str = ""
+    ASYNC_POSTGRES_URI: PostgresDsn | str = ""
 
-    @field_validator("ASYNC_DATABASE_URI", mode="after")
+    @field_validator("ASYNC_POSTGRES_URI", mode="after")
     def assemble_db_connection(cls, v: str | None, info: ValidationInfo) -> Any:
         if isinstance(v, str):
             if v == "":
@@ -55,6 +55,17 @@ class Settings(BaseSettings):
                     path=info.data["DATABASE_NAME"],
                 )
         return v
+
+    ASYNC_SQLITE_URI: str = ""
+
+    @field_validator("ASYNC_SQLITE_URI", mode="after")
+    def assemble_sqlite_uri(cls, v: str | None, info: ValidationInfo) -> Any:
+        if isinstance(v, str):
+            if v == "":
+                return f"sqlite+aiosqlite:///{info.data['PROJECT_NAME']}.db"
+        return v
+
+    DATABASE_ENGINE: str = "sqlite"
 
     _env_file = os.path.abspath(".env")
     model_config = SettingsConfigDict(case_sensitive=True, env_file=_env_file)

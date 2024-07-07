@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+# probably not the smartest way to do this
+export $(grep PROJECT_NAME .env)
+
 if ! command -v gh &> /dev/null; then
     echo "Error: GitHub CLI (gh) is not installed or not in PATH"
     echo "Please install gh CLI and try again"
@@ -11,8 +14,8 @@ fi
 echo "loading secrets"
 typeset -A gh_secrets
 gh_secrets=(
-    FLY_API_TOKEN_APP_PROD "$(op read 'op://scaffold/FLY_API_TOKEN/exampleproject-api-prod')"
-    FLY_API_TOKEN_APP_STAGING "$(op read 'op://scaffold/FLY_API_TOKEN/exampleproject-api-staging')"
+    FLY_API_TOKEN_APP_PROD "$(op read 'op://$PROJECT_NAME/FLY_API_TOKEN/exampleproject-api-prod')"
+    FLY_API_TOKEN_APP_STAGING "$(op read 'op://$PROJECT_NAME/FLY_API_TOKEN/exampleproject-api-staging')"
 )
 
 echo "loading variables"
@@ -23,7 +26,7 @@ gh_variables=(
 
 gh_write_secrets() {
     echo "writing secrets"
-    tmpfile=$(mktemp)
+    tmpfile="$(mktemp)"
     for secret_name value in ${(kv)gh_secrets}; do
         echo "$secret_name=$value" >> "$tmpfile"
     done
@@ -32,9 +35,11 @@ gh_write_secrets() {
     rm "$tmpfile"
 }
 
+gh_write_secrets
+
 gh_write_variables() {
     echo "writing variables"
-    tmpfile=$(mktemp)
+    tmpfile="$(mktemp)"
     for secret_name value in ${(kv)gh_variables}; do
         echo "$secret_name=$value" >> "$tmpfile"
     done
@@ -44,5 +49,3 @@ gh_write_variables() {
 }
 
 gh_write_variables 
-
-gh_write_secrets

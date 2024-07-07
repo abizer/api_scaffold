@@ -4,6 +4,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from app.core.config import settings
+from app.core.db.session import get_uri_for_db_type
 from app.modules import crud
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel
@@ -34,7 +35,7 @@ def _import_from_crud(crud):
 imported_modules = _import_from_crud(crud)
 target_metadata = SQLModel.metadata
 
-db_url = str(settings.ASYNC_DATABASE_URI)
+db_url = get_uri_for_db_type(settings.DATABASE_ENGINE)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
