@@ -1,0 +1,48 @@
+name: Deploy app-prod
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'app/**'
+    #   - 'supabase/migrations/**'
+    #   - 'supabase/seed.sql'
+
+  workflow_dispatch:
+jobs:
+#   migrate-supabase:
+#     name: Run Supabase migrations
+#     runs-on: ubuntu-latest
+#     concurrency: supabase-staging
+
+#     env:
+#       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+#       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_PROD_DB_PASSWORD }}
+#       SUPABASE_PROJECT_ID: ${{ vars.SUPABASE_PROD_PROJECT_ID }}
+#       # i dont think these are necessary but because we specify it in supabase/config.toml 
+#       # for local dev supabase throws if we don't set them
+#       SUPABASE_AUTH_GOOGLE_CLIENT_ID: ${{ secrets.SUPABASE_AUTH_GOOGLE_CLIENT_ID_PROD }}
+#       SUPABASE_AUTH_GOOGLE_SECRET: ${{ secrets.SUPABASE_AUTH_GOOGLE_SECRET_PROD }}
+
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: supabase/setup-cli@v1
+#         with:
+#           version: latest
+
+#       - run: supabase link --project-ref $SUPABASE_PROJECT_ID
+#       - run: supabase db push --include-seed
+
+  deploy-fly:
+    name: Deploy app to exampleproject-api-prod.fly.dev
+    runs-on: ubuntu-latest
+    concurrency: fly-deploy-exampleproject-api-prod
+    # needs: migrate-supabase
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - run: flyctl -c fly.exampleproject-api-prod.toml -a exampleproject-api-prod deploy --remote-only --build-arg GIT_SHA=${{ github.sha  }}
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_APP_PROD }}

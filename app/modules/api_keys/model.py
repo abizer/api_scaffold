@@ -1,6 +1,4 @@
 import uuid
-from sqlalchemy import DateTime
-from sqlalchemy.orm import declared_attr
 from sqlmodel import Field
 
 from app.modules.base.model import BaseUUIDTimestampModel

@@ -49,9 +49,9 @@ class BaseUUIDModel(SQLModel):
     )
 
 
-class BaseIDTimestampModel(BaseIDModel, TimestampMixin):
+class BaseIDTimestampModel(TimestampMixin, BaseIDModel):
     pass
 
 
-class BaseUUIDTimestampModel(BaseUUIDModel, TimestampMixin):
+class BaseUUIDTimestampModel(TimestampMixin, BaseUUIDModel):
     pass
