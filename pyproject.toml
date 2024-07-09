@@ -28,6 +28,9 @@ ruff = "^0.5.1"
 pytest = "^8.2.2"
 alembic = "^1.13.2"
 pytest-asyncio = "^0.23.7"
+ipykernel = "^6.29.5"
+jupyter-console = "^6.6.3"
+ipython = "^8.26.0"
 
 [build-system]
 requires = ["poetry-core"]

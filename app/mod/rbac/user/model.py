@@ -1,7 +1,7 @@
 import uuid
 from sqlmodel import Field, Relationship, SQLModel
 from app.mod.meta.model import BaseUUIDTimestampModel
-from typing import List
+from typing import List, Set
 
 from ..role.model import RoleTable
 
@@ -11,7 +11,7 @@ class User(BaseUUIDTimestampModel):
 class UserTable(User, table=True):
     __tablename__ = "rbac_users"
 
-    keys: List["KeyTable"] = Relationship(back_populates="user")
+    keys: List["KeyTable"] = Relationship(back_populates="user", sa_relationship_kwargs={"lazy": "joined", "innerjoin": True})
 
 class Key(BaseUUIDTimestampModel):
     key: uuid.UUID = Field(
@@ -27,4 +27,4 @@ class KeyTable(Key, table=True):
     __tablename__ = "rbac_keys"
 
     user: UserTable = Relationship(back_populates="keys")
-    role: RoleTable = Relationship(back_populates="keys")
+    role: RoleTable = Relationship(back_populates="keys", sa_relationship_kwargs={"lazy": "joined", "innerjoin": True})

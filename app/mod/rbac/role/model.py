@@ -9,9 +9,6 @@ class RoleResourceTable(BaseUUIDModel, table=True):
     role_id: uuid.UUID = Field(foreign_key="rbac_roles.id", index=True)
     resource_id: uuid.UUID = Field(foreign_key="rbac_resources.resource_id", index=True)
 
-    role: "RoleTable" = Relationship(back_populates="resource")
-    resource: "ResourceTable" = Relationship(back_populates="role")
-
 class ResourceTable(SQLModel, table=True):
     __tablename__ = "rbac_resources"
 
@@ -21,9 +18,9 @@ class ResourceTable(SQLModel, table=True):
 
     roles: List["RoleTable"] = Relationship(back_populates="resources", link_model=RoleResourceTable)
     
-    organization: "OrganizationTable" = Relationship(back_populates="resources")
-    project: "ProjectTable" = Relationship(back_populates="resources")
-    document: "DocumentTable" = Relationship(back_populates="resources")
+    organizations: List["OrganizationTable"] = Relationship(back_populates="resource")
+    projects: List["ProjectTable"] = Relationship(back_populates="resource")
+    documents: List["DocumentTable"] = Relationship(back_populates="resource")
 
 class Role(SQLModel):
     name: str = Field(nullable=False, index=True, unique=True)
@@ -36,8 +33,8 @@ class Role(SQLModel):
 class RoleTable(Role, BaseUUIDTimestampModel, table=True):
     __tablename__ = "rbac_roles"
 
-    keys: List["KeyTable"] = Relationship(back_populates="role")
-    resources: List["ResourceTable"] = Relationship(back_populates="role", link_model=RoleResourceTable)
+    keys: List["KeyTable"] = Relationship(back_populates="role", sa_relationship_kwargs={"cascade": "all, delete"})
+    resources: List[ResourceTable] = Relationship(back_populates="roles", link_model=RoleResourceTable)
     
 
 

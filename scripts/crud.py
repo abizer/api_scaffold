@@ -5,7 +5,7 @@ local_session = postgres_sessionmaker()
 type(db).session = property(lambda _: local_session)
 print("Local session injected to DB")
 
-from app.mod import model
+from app.mod import crud
 
 # import this into a jupyter console using %run scripts/crud.py to init the
 # db with an injected local session because the db is normally initialized
