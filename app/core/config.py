@@ -67,7 +67,7 @@ class Settings(BaseSettings):
 
     DATABASE_ENGINE: str = "postgres"
 
-    AUTHENTICATION_ENABLED: bool = True 
+    AUTHENTICATION_ENABLED: bool = True
     AUTH_JWT_SECRET: str
 
     _env_file = os.path.abspath(".env")

@@ -17,9 +17,10 @@ async def info() -> JSONResponse:
         "mode": settings.MODE,
         "build": {
             k: v for k, v in map(lambda x: x.split(":"), settings.BUILD_INFO.split(" "))
-        }
+        },
     }
-    
+
+
 @meta.get("/db-status")
 async def db_status() -> JSONResponse:
     if settings.DATABASE_ENGINE == "postgres":

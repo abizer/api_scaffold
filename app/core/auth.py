@@ -59,7 +59,7 @@ class AuthBearer(HTTPBearer):
     ) -> ApiKeyIdentity:
         if not settings.AUTHENTICATION_ENABLED:
             return TEST_API_KEY
-        elif identity := (is_api_token(token)): #or is_supabase_token(token))
+        elif identity := (is_api_token(token)):  # or is_supabase_token(token))
             return identity
         else:
             raise HTTPException(status_code=401, detail="Invalid token or API key.")
@@ -76,9 +76,7 @@ def _encode_jwt(data: dict, expires_delta: Optional[timedelta] = None):
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode, settings.AUTH_JWT_SECRET, algorithm=ALGORITHM
-    )
+    encoded_jwt = jwt.encode(to_encode, settings.AUTH_JWT_SECRET, algorithm=ALGORITHM)
     return encoded_jwt
 
 

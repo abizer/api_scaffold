@@ -1,13 +1,29 @@
 import uuid
-from app.mod.meta.model import BaseUUIDModel, BaseUUIDTimestampModel, TimestampMixin
+
+from sqlalchemy import Column, ForeignKey
+from app.mod.meta.model import BaseUUIDModel, BaseUUIDTimestampModel
 from sqlmodel import Field, Relationship, SQLModel
-from typing import List, Optional
+from typing import List
+
 
 class RoleResourceTable(BaseUUIDModel, table=True):
     __tablename__ = "rbac_role_resource_associations"
 
-    role_id: uuid.UUID = Field(foreign_key="rbac_roles.id", index=True)
-    resource_id: uuid.UUID = Field(foreign_key="rbac_resources.resource_id", index=True)
+    role_id: uuid.UUID = Field(
+        sa_column=Column(
+            ForeignKey("rbac_roles.id", ondelete="CASCADE"),
+            nullable=False,
+            index=True,
+        )
+    )
+    resource_id: uuid.UUID = Field(
+        sa_column=Column(
+            ForeignKey("rbac_resources.resource_id", ondelete="CASCADE"),
+            nullable=False,
+            index=True,
+        )
+    )
+
 
 class ResourceTable(SQLModel, table=True):
     __tablename__ = "rbac_resources"
@@ -16,11 +32,14 @@ class ResourceTable(SQLModel, table=True):
     name: str = Field(nullable=False, index=True, unique=True)
     resource_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
-    roles: List["RoleTable"] = Relationship(back_populates="resources", link_model=RoleResourceTable)
-    
+    roles: List["RoleTable"] = Relationship(
+        back_populates="resources", link_model=RoleResourceTable
+    )
+
     organizations: List["OrganizationTable"] = Relationship(back_populates="resource")
     projects: List["ProjectTable"] = Relationship(back_populates="resource")
     documents: List["DocumentTable"] = Relationship(back_populates="resource")
+
 
 class Role(SQLModel):
     name: str = Field(nullable=False, index=True, unique=True)
@@ -30,13 +49,13 @@ class Role(SQLModel):
     has_write: bool = Field(default=False)
     has_delete: bool = Field(default=False)
 
+
 class RoleTable(Role, BaseUUIDTimestampModel, table=True):
     __tablename__ = "rbac_roles"
 
-    keys: List["KeyTable"] = Relationship(back_populates="role", sa_relationship_kwargs={"cascade": "all, delete"})
-    resources: List[ResourceTable] = Relationship(back_populates="roles", link_model=RoleResourceTable)
-    
-
-
-
-
+    keys: List["KeyTable"] = Relationship(
+        back_populates="role", sa_relationship_kwargs={"cascade": "all, delete"}
+    )
+    resources: List[ResourceTable] = Relationship(
+        back_populates="roles", link_model=RoleResourceTable
+    )

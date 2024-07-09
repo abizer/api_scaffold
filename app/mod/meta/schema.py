@@ -21,12 +21,15 @@ class UserIdentity(BaseModel):
     id: str
     email: str
 
+
 class ApiKeyIdentity(BaseModel):
-    api_key: str 
+    api_key: str
+
 
 class SupabaseAccessToken(BaseModel):
-    sub: str 
+    sub: str
     email: str
+
 
 # API response schemas
 
