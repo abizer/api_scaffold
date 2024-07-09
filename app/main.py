@@ -9,7 +9,7 @@ from .core.db.middleware import SQLModelMiddleware
 from .core.db.session import get_engine_for_db_type
 from .core.log import D, make_logger
 
-from .modules.api import v1_router
+from .mod.api import v1_router
 
 logger = make_logger(__name__)
 

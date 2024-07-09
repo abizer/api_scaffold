@@ -1,5 +1,9 @@
 import importlib
 
+def import_from_models(models):
+    for name in models.__all__:
+        importlib.import_module(getattr(models, name).__module__)
+        
 
 def import_from_crud(crud):
     models = []

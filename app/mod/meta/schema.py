@@ -29,10 +29,6 @@ class SupabaseAccessToken(BaseModel):
     email: str
 
 # API response schemas
-class InfoResponse(BaseModel):
-    project_name: str
-    mode: str
-    build_info: str
 
 
 class PageBase(Page[T], Generic[T]):

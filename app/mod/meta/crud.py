@@ -11,7 +11,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel.sql.expression import Select
 
 from app.core.db.middleware import db
-from app.modules.base.schema import IOrderEnum
+from app.mod.meta.schema import IOrderEnum
 
 ModelType = TypeVar("ModelType", bound=SQLModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

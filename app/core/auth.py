@@ -15,7 +15,7 @@ from pydantic import ValidationError
 
 from app.core.config import settings
 
-from app.modules.base.schema import UserIdentity, ApiKeyIdentity, SupabaseAccessToken
+from app.mod.meta.schema import UserIdentity, ApiKeyIdentity, SupabaseAccessToken
 from app.core.log import make_logger
 
 ALGORITHM = "HS256"

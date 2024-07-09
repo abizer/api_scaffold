@@ -5,22 +5,22 @@ from fastapi.responses import JSONResponse
 from app.core.config import settings
 from app.utils.timer import timer
 
-from .schema import InfoResponse
 from .service import get_active_connections, get_active_transactions
 
-router = APIRouter()
+meta = APIRouter()
 
 
-@router.get("/info")
-async def info() -> InfoResponse:
-    return InfoResponse(
-        project_name=settings.PROJECT_NAME,
-        mode=settings.MODE,
-        build_info=settings.BUILD_INFO,
-    )
-
-
-@router.get("/db")
+@meta.get("/info")
+async def info() -> JSONResponse:
+    return {
+        "project_name": settings.PROJECT_NAME,
+        "mode": settings.MODE,
+        "build": {
+            k: v for k, v in map(lambda x: x.split(":"), settings.BUILD_INFO.split(" "))
+        }
+    }
+    
+@meta.get("/db-status")
 async def db_status() -> JSONResponse:
     if settings.DATABASE_ENGINE == "postgres":
         with timer() as t:

@@ -65,7 +65,7 @@ class Settings(BaseSettings):
                 return f"sqlite+aiosqlite:///{info.data['PROJECT_NAME']}.db"
         return v
 
-    DATABASE_ENGINE: str = "sqlite"
+    DATABASE_ENGINE: str = "postgres"
 
     AUTHENTICATION_ENABLED: bool = True 
     AUTH_JWT_SECRET: str

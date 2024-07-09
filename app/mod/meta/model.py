@@ -13,10 +13,10 @@ from sqlmodel import SQLModel as _SQLModel
 class SQLModel(_SQLModel):
     @declared_attr  # type: ignore
     def __tablename__(cls) -> str:
-        return cls.__name__.lower() + "s"
+        return cls.__name__.lower()
 
 
-class TimestampMixin(SQLModel):
+class TimestampMixin:
     # use tz-aware UTC timestamps everywhere
     # so it's easy for postgres comparisons
     created_at: datetime = Field(

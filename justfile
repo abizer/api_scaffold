@@ -1,7 +1,7 @@
 default:
     @just --list
 
-project := "exampleproject-api"
+project := "personal-api"
 app := "app"
 env := "local"
 
