@@ -3,7 +3,7 @@ from uuid import UUID
 from uuid6 import uuid7
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, func
 from sqlalchemy.orm import declared_attr
 from sqlmodel import Field
 from sqlmodel import SQLModel as _SQLModel
@@ -20,14 +20,16 @@ class TimestampMixin:
     # use tz-aware UTC timestamps everywhere
     # so it's easy for postgres comparisons
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
+        nullable=True,
+        default=func.utc_timestamp(),
         sa_type=DateTime(timezone=True),
     )
 
     updated_at: datetime = Field(
+        nullable=True,
         sa_type=DateTime(timezone=True),
         default_factory=lambda: datetime.now(UTC),
-        sa_column_kwargs={"onupdate": datetime.now(UTC)},
+        sa_column_kwargs={"onupdate": func.utc_timestamp()},
     )
 
 
