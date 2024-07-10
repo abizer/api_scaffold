@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import select
+from sqlalchemy import exc, select, insert
 from typing import Optional
 from app.core.db.middleware import AsyncSession
 
@@ -50,6 +50,24 @@ class CRUDUser(CRUDBase[UserTable, UserCreate, UserUpdate]):
         db_session = self.db.session
         query = select(self.model)
         return (await db_session.exec(query)).scalars().all()
+
+    async def create_from_email(
+        self, email: str, db_session: AsyncSession | None = None
+    ) -> UserTable:
+        db_session = db_session or self.db.session
+
+        user = UserCreate(email=email)
+        db_user = UserTable.model_validate(user)
+        db_session.add(db_user)
+        try:
+            await db_session.commit()
+        except exc.IntegrityError as e:
+            await db_session.rollback()
+            raise e
+
+        # this can fail too
+        await db_session.refresh(db_user)
+        return db_user
 
 
 key = CRUDKey(KeyTable)

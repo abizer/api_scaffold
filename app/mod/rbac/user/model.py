@@ -32,14 +32,14 @@ class Key(SQLModel):
     is_active: bool = Field(default=True)
     user_id: uuid.UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_users.id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_users.id", ondelete="CASCADE"),
             nullable=False,
             index=True,
         )
     )
     role_id: uuid.UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_roles.id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_roles.id", ondelete="CASCADE"),
             nullable=False,
             index=True,
         )

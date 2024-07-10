@@ -11,14 +11,14 @@ class RoleResourceTable(BaseUUIDModel, table=True):
 
     role_id: uuid.UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_roles.id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_roles.id", ondelete="CASCADE"),
             nullable=False,
             index=True,
         )
     )
     resource_id: uuid.UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_resources.resource_id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_resources.id", ondelete="CASCADE"),
             nullable=False,
             index=True,
         )
@@ -28,9 +28,10 @@ class RoleResourceTable(BaseUUIDModel, table=True):
 class ResourceTable(SQLModel, table=True):
     __tablename__ = "rbac_resources"
 
+    # the db column is created with default=uuid_generate_v4()
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     # keep a name for convenience
     name: str = Field(nullable=False, index=True, unique=True)
-    resource_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
     roles: List["RoleTable"] = Relationship(
         back_populates="resources", link_model=RoleResourceTable

@@ -37,8 +37,9 @@ def get_uri_for_db_type(db_type: str) -> str:
 
 postgres_engine = create_async_engine(
     url=str(settings.ASYNC_POSTGRES_URI),
-    echo=False,
+    echo=True if settings.MODE == ModeEnum.DEV else False,
     poolclass=NullPool if settings.MODE == ModeEnum.TEST else AsyncAdaptedQueuePool,
+    # connect_args={"options": "-c search_path=rbac, api, public"},
 )
 
 postgres_sessionmaker = sessionmaker(

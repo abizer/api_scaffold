@@ -1,9 +1,10 @@
 from uuid import UUID
 
-from uuid6 import uuid7
+from uuid import UUID
 from datetime import UTC, datetime
+import uuid
 
-from sqlalchemy import DateTime, func
+from sqlalchemy import DateTime, func, Column, UUID as SA_UUID
 from sqlalchemy.orm import declared_attr
 from sqlmodel import Field
 from sqlmodel import SQLModel as _SQLModel
@@ -21,15 +22,15 @@ class TimestampMixin:
     # so it's easy for postgres comparisons
     created_at: datetime = Field(
         nullable=True,
-        default=func.utc_timestamp(),
+        default=func.now(),
         sa_type=DateTime(timezone=True),
     )
 
     updated_at: datetime = Field(
         nullable=True,
         sa_type=DateTime(timezone=True),
-        default_factory=lambda: datetime.now(UTC),
-        sa_column_kwargs={"onupdate": func.utc_timestamp()},
+        default=func.now(),
+        sa_column_kwargs={"onupdate": func.now()},
     )
 
 
@@ -44,9 +45,8 @@ class BaseIDModel(SQLModel):
 
 class BaseUUIDModel(SQLModel):
     id: UUID | None = Field(
-        default_factory=uuid7,
         primary_key=True,
-        index=True,
+        default_factory=uuid.uuid4,
         nullable=False,
     )
 

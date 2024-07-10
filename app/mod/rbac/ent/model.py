@@ -29,12 +29,13 @@ from ..role.model import ResourceTable
 
 
 # unfortunately we don't really use the NamedEntity as intended, just as a pydantic type
+# TODO(abizer): hmm https://docs.sqlalchemy.org/en/20/orm/declarative_mixins.html#using-orm-declared-attr-to-generate-table-specific-inheriting-columns
 class NamedEntity(SQLModel):
     name: str = Field(nullable=False, index=True, unique=True)
     description: Optional[str] = Field(nullable=True)
     resource_id: UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_resources.resource_id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_resources.id", ondelete="CASCADE"),
             nullable=False,
             unique=True,
         )
@@ -46,7 +47,7 @@ class Organization(SQLModel):
     description: Optional[str] = Field(nullable=True)
     resource_id: UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_resources.resource_id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_resources.id", ondelete="CASCADE"),
             nullable=False,
             unique=True,
         )
@@ -72,12 +73,14 @@ class Project(SQLModel):
         sa_column=Column(
             # project resource_ids are not unique. Multiple projects in a single org will
             # share the same resource_id.
-            ForeignKey("rbac_resources.resource_id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_resources.id", ondelete="CASCADE"),
             nullable=False,
         )
     )
     organization_id: UUID = Field(
-        sa_column=Column(ForeignKey("rbac_orgs.id", ondelete="CASCADE"), nullable=False)
+        sa_column=Column(
+            ForeignKey("rbac.rbac_orgs.id", ondelete="CASCADE"), nullable=False
+        )
     )
 
 
@@ -98,13 +101,13 @@ class Document(SQLModel):
         sa_column=Column(
             # document resource_ids are not unique. Multiple documents in a single project will
             # share the same resource_id.
-            ForeignKey("rbac_resources.resource_id", ondelete="CASCADE"),
+            ForeignKey("rbac.rbac_resources.id", ondelete="CASCADE"),
             nullable=False,
         )
     )
     project_id: UUID = Field(
         sa_column=Column(
-            ForeignKey("rbac_projects.id", ondelete="CASCADE"), nullable=False
+            ForeignKey("rbac.rbac_projects.id", ondelete="CASCADE"), nullable=False
         )
     )
     data: dict = Field(sa_column=Column(JSONB), default=lambda: {})

@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "ruff.interpreter": [
+        "/Users/abizer/repos/github/abizer/api_scaffold/.venv/bin/python"
+    ]
+}
